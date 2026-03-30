@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -18,12 +18,17 @@ export default function SearchPage() {
   const { t, i18n } = useTranslation();
   const router = useRouter();
   const { recentFoods, favorites } = useStore();
+  const [mounted, setMounted] = useState(false);
 
   const [query, setQuery] = useState('');
   const [selectedFood, setSelectedFood] = useState<Food | null>(null);
   const [detailOpen, setDetailOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState('all');
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const debouncedQuery = useDebounce(query, 300);
 
@@ -55,6 +60,38 @@ export default function SearchPage() {
       : activeTab === 'recent' 
         ? recentFoods 
         : filteredFoods;
+
+  // Prevent hydration mismatch
+  if (!mounted) {
+    return (
+      <div className="page-transition pb-24 min-h-screen">
+        <header className="sticky top-0 z-10 bg-background/95 backdrop-blur-sm border-b px-4 py-4">
+          <div className="flex items-center gap-3">
+            <Button variant="ghost" size="icon" disabled>
+              <ArrowLeft className="w-5 h-5" />
+            </Button>
+            <h1 className="text-xl font-bold">{t('search.title')}</h1>
+          </div>
+          <div className="mt-4 relative">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+            <Input
+              type="text"
+              placeholder={t('search.placeholder')}
+              disabled
+              className="pl-10 h-12 text-base"
+            />
+          </div>
+        </header>
+        <div className="px-4 py-4">
+          <div className="space-y-3">
+            {Array.from({ length: 5 }).map((_, i) => (
+              <div key={i} className="h-20 bg-muted rounded-lg" />
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="page-transition pb-24 min-h-screen">

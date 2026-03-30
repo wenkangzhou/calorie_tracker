@@ -1,7 +1,7 @@
 'use client';
 
 import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
+import { persist, createJSONStorage } from 'zustand/middleware';
 import { Food, MealItem, MealType, DailyLog, UserProfile, NutritionSummary } from '@/types';
 
 interface AppState {
@@ -27,9 +27,18 @@ interface AppState {
   favorites: string[];
   toggleFavorite: (foodId: string) => void;
   isFavorite: (foodId: string) => boolean;
+  
+  // Hydration
+  _hasHydrated: boolean;
+  setHasHydrated: (state: boolean) => void;
 }
 
-const getTodayKey = () => new Date().toISOString().split('T')[0];
+const getTodayKey = () => {
+  if (typeof window === 'undefined') {
+    return new Date().toISOString().split('T')[0];
+  }
+  return new Date().toISOString().split('T')[0];
+};
 
 const initialUserProfile: UserProfile = {
   name: 'User',
@@ -165,15 +174,25 @@ export const useStore = create<AppState>()(
           };
         }),
       isFavorite: (foodId) => get().favorites.includes(foodId),
+      
+      // Hydration
+      _hasHydrated: false,
+      setHasHydrated: (state) => set({ _hasHydrated: state }),
     }),
     {
       name: 'calorie-tracker-storage',
+      storage: createJSONStorage(() => localStorage),
       partialize: (state) => ({
         userProfile: state.userProfile,
         dailyLogs: state.dailyLogs,
         recentFoods: state.recentFoods,
         favorites: state.favorites,
       }),
+      onRehydrateStorage: () => (state) => {
+        if (state) {
+          state.setHasHydrated(true);
+        }
+      },
     }
   )
 );

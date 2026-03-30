@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useStore } from '@/store/useStore';
 import { Card } from '@/components/ui/card';
@@ -13,8 +13,13 @@ import i18n from '@/lib/i18n';
 
 export default function ProfilePage() {
   const { t, i18n: i18nInstance } = useTranslation();
-  const { theme, setTheme } = useTheme();
+  const { theme, setTheme, resolvedTheme } = useTheme();
   const { userProfile, updateUserProfile } = useStore();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const [formData, setFormData] = useState({
     name: userProfile.name,
@@ -32,6 +37,33 @@ export default function ProfilePage() {
     i18n.changeLanguage(lang);
     localStorage.setItem('i18nextLng', lang);
   };
+
+  // Prevent hydration mismatch
+  if (!mounted) {
+    return (
+      <div className="page-transition pb-24 px-4">
+        <header className="pt-6 pb-4">
+          <div className="h-8 w-32 bg-muted rounded" />
+        </header>
+
+        <Card className="p-6 mb-6">
+          <div className="flex items-center gap-4">
+            <div className="w-20 h-20 rounded-full bg-muted" />
+            <div className="space-y-2">
+              <div className="h-6 w-24 bg-muted rounded" />
+              <div className="h-4 w-32 bg-muted rounded" />
+            </div>
+          </div>
+        </Card>
+
+        <Card className="p-6 mb-6 h-96 bg-muted" />
+        <Card className="p-6 mb-6 h-64 bg-muted" />
+      </div>
+    );
+  }
+
+  // Use resolvedTheme for display, theme for setting
+  const currentTheme = theme === 'system' ? resolvedTheme : theme;
 
   return (
     <div className="page-transition pb-24 px-4">
@@ -64,7 +96,7 @@ export default function ProfilePage() {
         
         <div className="space-y-4">
           <div>
-            <Label htmlFor="name">{t('profile.name') || 'Name'}</Label>
+            <Label htmlFor="name">{t('profile.name')}</Label>
             <Input
               id="name"
               value={formData.name}

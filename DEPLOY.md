@@ -49,6 +49,22 @@ yarn build
 - 所有数据存储在浏览器的 localStorage 中
 - 无需配置环境变量
 
+## Hydration 错误修复说明
+
+React Error #418 是服务端渲染（SSR）和客户端渲染（CSR）之间的不匹配导致的。以下组件已修复：
+
+1. **BottomNav** - 添加了 `mounted` 状态检查
+2. **ProgressRing** - 添加了 `mounted` 状态检查
+3. **I18nProvider** - 延迟渲染直到客户端挂载
+4. **ThemeProvider** - 添加了 `forcedTheme` 避免闪烁
+5. **page.tsx** (仪表板) - 添加了骨架屏加载状态
+6. **search/page.tsx** - 添加了骨架屏加载状态
+7. **progress/page.tsx** - 添加了骨架屏加载状态
+8. **profile/page.tsx** - 添加了骨架屏加载状态
+9. **FoodCard** - 添加了 `mounted` 状态检查
+
+所有页面现在都会在客户端挂载后才渲染动态内容，避免了 SSR 和 CSR 之间的不一致。
+
 ## GitHub 部署
 
 1. 在 GitHub 上创建新仓库

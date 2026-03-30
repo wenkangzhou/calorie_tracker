@@ -43,7 +43,47 @@ export default function DashboardPage() {
 
   const [selectedFood, setSelectedFood] = useState<Food | null>(null);
   const [detailOpen, setDetailOpen] = useState(false);
-  const [currentDate, setCurrentDate] = useState(new Date());
+  const [currentDate, setCurrentDate] = useState<Date | null>(null);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+    setCurrentDate(new Date());
+  }, []);
+
+  // Prevent hydration issues by not rendering date-dependent content until mounted
+  if (!mounted || !currentDate) {
+    return (
+      <div className="page-transition pb-24">
+        {/* Skeleton loading state */}
+        <header className="px-4 pt-6 pb-4">
+          <div className="flex items-center justify-between">
+            <div>
+              <div className="h-4 w-20 bg-muted rounded mb-2" />
+              <div className="h-8 w-32 bg-muted rounded" />
+            </div>
+            <div className="w-12 h-12 rounded-full bg-muted" />
+          </div>
+        </header>
+        
+        <div className="px-4 mb-6">
+          <div className="h-12 bg-muted rounded-xl" />
+        </div>
+        
+        <div className="px-4 mb-6">
+          <div className="h-64 bg-muted rounded-2xl" />
+        </div>
+        
+        <div className="px-4 mb-6">
+          <div className="grid grid-cols-3 gap-3">
+            <div className="h-24 bg-muted rounded-lg" />
+            <div className="h-24 bg-muted rounded-lg" />
+            <div className="h-24 bg-muted rounded-lg" />
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   const todayLog = getTodayLog();
   const summary = getNutritionSummary();
@@ -62,6 +102,7 @@ export default function DashboardPage() {
   };
 
   const handlePrevDay = () => {
+    if (!currentDate) return;
     const newDate = new Date(currentDate);
     newDate.setDate(newDate.getDate() - 1);
     setCurrentDate(newDate);
@@ -69,6 +110,7 @@ export default function DashboardPage() {
   };
 
   const handleNextDay = () => {
+    if (!currentDate) return;
     const newDate = new Date(currentDate);
     newDate.setDate(newDate.getDate() + 1);
     setCurrentDate(newDate);
@@ -81,7 +123,7 @@ export default function DashboardPage() {
     setSelectedDate(today.toISOString().split('T')[0]);
   };
 
-  const hour = new Date().getHours();
+  const hour = currentDate.getHours();
   const greeting = getGreeting(hour, (key) => t(`greeting.${key.split('.')[1]}`));
 
   const groupedItems = todayLog.items.reduce((acc, item) => {

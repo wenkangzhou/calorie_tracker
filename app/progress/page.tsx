@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useStore } from '@/store/useStore';
 import { Card } from '@/components/ui/card';
@@ -11,6 +11,11 @@ import { formatDate } from '@/lib/utils';
 export default function ProgressPage() {
   const { t, i18n } = useTranslation();
   const { userProfile, dailyLogs, getNutritionSummary } = useStore();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   // Calculate stats
   const stats = useMemo(() => {
@@ -45,6 +50,8 @@ export default function ProgressPage() {
 
   // Get last 7 days data
   const weeklyData = useMemo(() => {
+    if (!mounted) return [];
+    
     const data = [];
     const today = new Date();
     
@@ -63,13 +70,34 @@ export default function ProgressPage() {
     }
     
     return data;
-  }, [getNutritionSummary, userProfile.dailyCalorieGoal, i18n.language]);
+  }, [getNutritionSummary, userProfile.dailyCalorieGoal, i18n.language, mounted]);
 
   const todaySummary = getNutritionSummary();
   const todayProgress = Math.min(
     (todaySummary.calories / userProfile.dailyCalorieGoal) * 100,
     100
   );
+
+  // Prevent hydration mismatch
+  if (!mounted) {
+    return (
+      <div className="page-transition pb-24 px-4">
+        <header className="pt-6 pb-4">
+          <div className="h-8 w-32 bg-muted rounded mb-2" />
+          <div className="h-4 w-48 bg-muted rounded" />
+        </header>
+
+        <Card className="p-6 mb-6 h-32 bg-muted" />
+        <Card className="p-6 mb-6 h-64 bg-muted" />
+        <div className="grid grid-cols-2 gap-4 mb-6">
+          <Card className="h-24 bg-muted" />
+          <Card className="h-24 bg-muted" />
+          <Card className="h-24 bg-muted" />
+          <Card className="h-24 bg-muted" />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="page-transition pb-24 px-4">

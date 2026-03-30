@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import { Food } from '@/types';
 import { Card } from '@/components/ui/card';
 import { useTranslation } from 'react-i18next';
@@ -17,7 +18,13 @@ interface FoodCardProps {
 export function FoodCard({ food, onClick, showFavorite = true }: FoodCardProps) {
   const { t, i18n } = useTranslation();
   const { isFavorite, toggleFavorite } = useStore();
-  const isFav = isFavorite(food.id);
+  const [mounted, setMounted] = useState(false);
+  
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+  
+  const isFav = mounted ? isFavorite(food.id) : false;
 
   const displayName = i18n.language === 'zh' ? food.name : food.nameEn;
   const categoryLabel = getCategoryLabel(food.category, i18n.language);
@@ -38,7 +45,7 @@ export function FoodCard({ food, onClick, showFavorite = true }: FoodCardProps) 
             <h3 className="font-semibold text-foreground truncate">
               {displayName}
             </h3>
-            {showFavorite && (
+            {showFavorite && mounted && (
               <button
                 onClick={handleFavoriteClick}
                 className={cn(
@@ -66,7 +73,7 @@ export function FoodCard({ food, onClick, showFavorite = true }: FoodCardProps) 
         </div>
         <div className="ml-4 text-right">
           <div className="text-xs text-muted-foreground space-y-1">
-            <div>P1: {food.protein}g</div>
+            <div>P: {food.protein}g</div>
             <div>C: {food.carbs}g</div>
             <div>F: {food.fat}g</div>
           </div>
