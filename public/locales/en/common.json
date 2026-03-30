@@ -1,0 +1,119 @@
+{
+  "appName": "Calorie Tracker",
+  "greeting": {
+    "morning": "Good morning",
+    "afternoon": "Good afternoon",
+    "evening": "Good evening"
+  },
+  "nav": {
+    "dashboard": "Dashboard",
+    "search": "Search",
+    "progress": "Progress",
+    "profile": "Profile"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "dailyGoal": "Daily Goal",
+    "consumed": "Consumed",
+    "remaining": "Remaining",
+    "calories": "calories",
+    "kcal": "kcal",
+    "carbs": "Carbs",
+    "protein": "Protein",
+    "fat": "Fat",
+    "g": "g",
+    "meals": {
+      "breakfast": "Breakfast",
+      "lunch": "Lunch",
+      "dinner": "Dinner",
+      "snack": "Snack"
+    },
+    "addFood": "Add Food",
+    "noFood": "No food added yet",
+    "water": "Water",
+    "glasses": "glasses"
+  },
+  "search": {
+    "title": "Search Food",
+    "placeholder": "Search for food...",
+    "searching": "Searching...",
+    "noResults": "No results found",
+    "categories": "Categories",
+    "allFoods": "All Foods",
+    "recent": "Recent",
+    "favorites": "Favorites"
+  },
+  "food": {
+    "calories": "Calories",
+    "protein": "Protein",
+    "carbs": "Carbs",
+    "fat": "Fat",
+    "perServing": "per serving",
+    "servingSize": "Serving Size",
+    "addTo": "Add to",
+    "quantity": "Quantity",
+    "nutritionFacts": "Nutrition Facts",
+    "mealType": "Meal Type"
+  },
+  "progress": {
+    "title": "Progress",
+    "streak": "Day Streak",
+    "days": "days",
+    "weeklyOverview": "Weekly Overview",
+    "nutritionTrends": "Nutrition Trends",
+    "achievements": "Achievements",
+    "goalReached": "Goal Reached",
+    "daysTracked": "Days Tracked",
+    "avgCalories": "Avg. Calories",
+    "bestDay": "Best Day"
+  },
+  "profile": {
+    "title": "Profile",
+    "goals": "Goals",
+    "settings": "Settings",
+    "dailyCalorieGoal": "Daily Calorie Goal",
+    "dailyProteinGoal": "Daily Protein Goal",
+    "dailyCarbsGoal": "Daily Carbs Goal",
+    "dailyFatGoal": "Daily Fat Goal",
+    "language": "Language",
+    "theme": "Theme",
+    "light": "Light",
+    "dark": "Dark",
+    "system": "System",
+    "save": "Save",
+    "logout": "Logout"
+  },
+  "mealTypes": {
+    "breakfast": "Breakfast",
+    "lunch": "Lunch",
+    "dinner": "Dinner",
+    "snack": "Snack"
+  },
+  "categories": {
+    "grain": "Grains",
+    "vegetable": "Vegetables",
+    "fruit": "Fruits",
+    "meat": "Meat",
+    "seafood": "Seafood",
+    "dairy": "Dairy",
+    "egg": "Eggs",
+    "snack": "Snacks",
+    "beverage": "Beverages",
+    "other": "Others"
+  },
+  "common": {
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "delete": "Delete",
+    "edit": "Edit",
+    "save": "Save",
+    "add": "Add",
+    "remove": "Remove",
+    "back": "Back",
+    "next": "Next",
+    "done": "Done",
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success"
+  }
+}
